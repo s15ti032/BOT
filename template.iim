@@ -1,0 +1,100 @@
+﻿VERSION BUILD=9030808 RECORDER=FX
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Copyright © 2017 Mikiya Abe All rights reserved.
+'
+'This source code or any portion thereof must not be reproduced or used in any manner whatsoever.
+'
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+'Set department you want to buy(e.g. shirts)
+'Choose from "jackets" or "shirts" "tops_sweaters" or "sweatshirts" or "pants" or "hats" or "accessories" or "skate"
+SET department "shirts"
+
+'Set the size of the cloth you want to buy(e.g. Large)
+'"Choose from "Small" or "Medium" or "Large"
+SET size "Large"
+
+'Set your lastname(e.g. John)
+SET my_lastName "John"
+
+'Set your firstname(e.g. Smith)
+SET my_firstName "Smith"
+
+'Set your email address(e.g. hogehoge@gmail.com)
+SET my_email "hogehoge@gmail.com"
+
+'Set your phone number(e.g. 080-1234-5678)
+SET my_phoneNumber "08012345678"
+
+'Set your state(e.g. 東京都)
+SET my_state "東京都"
+
+'Set your city(e.g. 渋谷区神宮前)
+SET my_city "渋谷区神宮前"
+
+'Set your address(e.g. 4-32-7)
+SET my_address "4-32-7"
+
+'Set your zipcode(150-0001)
+SET my_zip "1500001"
+
+
+'Set your creditcard type(e.g. visa)
+'You can also choose COD option
+'Choose from "visa" or "american_express" or "master" or "cod"
+SET my_cardType "visa"
+
+'Set your creditcard number(e.g. 1234 5678 9012 3456)
+SET my_cardNumber "1234567890123456"
+
+'Set the term of validity of your creditcard(e.g. til Month=09 Year=2019)
+SET my_validMonth "09"
+SET my_validYear "2019"
+
+'Set the cvv number of your creditcard(e.g. 1234)
+SET my_cvv "1234"
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+TAB T=1
+
+'STATUS=ON let all images unvisible
+FILTER TYPE=IMAGES STATUS=ON
+
+'Go to a categolized page you want to go
+URL GOTO=http://www.supremenewyork.com/shop/all/{{department}}
+
+'Select item(NYCサイトの商品配列を見てPOS=XXXを変更
+TAG POS=3 TYPE=IMG ATTR=SRC:http://d17ol771963kd3.cloudfront.net/*.jpg
+
+'item page
+TAG POS=1 TYPE=SELECT FORM=id:cart-addf ATTR=NAME:size CONTENT=${{size}}
+TAG POS=1 TYPE=INPUT:SUBMIT ATTR=VALUE:カートに入れる
+SET !REPLAYSPEED MEDIUM
+TAG POS=1 TYPE=A ATTR=TXT:ご注文手続きへ
+
+SET !REPLAYSPEED FAST
+'checkout page
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:credit_card[last_name] CONTENT={{my_lastName}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:credit_card[first_name] CONTENT={{my_firstName}}
+TAG POS=1 TYPE=INPUT:EMAIL FORM=ACTION:/checkout ATTR=NAME:order[email] CONTENT={{my_email}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:order[tel] CONTENT={{my_phoneNumber}}
+TAG POS=1 TYPE=SELECT FORM=ACTION:/checkout ATTR=NAME:order[billing_state] CONTENT=%<SP>{{my_state}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:order[billing_city] CONTENT={{my_city}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:order[billing_address] CONTENT={{my_address}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:order[billing_zip] CONTENT={{my_zip}}
+
+'Checkout option
+TAG POS=1 TYPE=SELECT FORM=ACTION:/checkout ATTR=NAME:credit_card[type] CONTENT=%{{my_cardType}}
+'If you want COD option, coment out the following 4 lines
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:credit_card[cnb] CONTENT={{my_cardNumber}}
+TAG POS=1 TYPE=SELECT FORM=ACTION:/checkout ATTR=NAME:credit_card[month] CONTENT=%{{my_validMonth}}
+TAG POS=1 TYPE=SELECT FORM=ACTION:/checkout ATTR=NAME:credit_card[year] CONTENT=%{{my_validYear}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:credit_card[vval] CONTENT={{my_cvv}}
+
+'checkbox
+TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ACTION:/checkout ATTR=NAME:order[terms] CONTENT=YES
+
+'submit
+'Comment out only when you purchase an item
+'TAG POS=1 TYPE=INPUT:SUBMIT FORM=ACTION:/checkout ATTR=NAME:commit
