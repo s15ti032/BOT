@@ -1,4 +1,4 @@
-# BOT
+# Supreme Online BOT
 
 
 ## Outline
