@@ -1,9 +1,7 @@
 ﻿VERSION BUILD=9030808 RECORDER=FX
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-'Copyright © 2017 @s15ti032(GitHub ID) All rights reserved.
-'
-'This source code or any portion thereof must not be reproduced or used in any manner whatsoever.
-'
+'Copyright © 2017 @struuuuggle All rights reserved.
+
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 'Set department you want to buy(e.g. shirts)
@@ -37,7 +35,6 @@ SET my_address "4-32-7"
 
 'Set your zipcode(150-0001)
 SET my_zip "1500001"
-
 
 'Set your creditcard type(e.g. visa)
 'You can also choose COD option
@@ -96,5 +93,6 @@ TAG POS=1 TYPE=INPUT:TEXT FORM=ACTION:/checkout ATTR=NAME:credit_card[vval] CONT
 TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ACTION:/checkout ATTR=NAME:order[terms] CONTENT=YES
 
 'submit
-'Comment out only when you purchase an item
+'====WARNING====
+'Be sure to comment out only when you purchase an item
 'TAG POS=1 TYPE=INPUT:SUBMIT FORM=ACTION:/checkout ATTR=NAME:commit
